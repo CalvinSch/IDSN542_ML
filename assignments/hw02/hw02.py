@@ -113,8 +113,8 @@ def caesarCipherGame():
             print("\n\tDecrypted message: " + decrypted_message)
             print("\n\tOriginal Message: " + user_message)
     except ValueError as ve:
-        print(str(ve))
-        return #Should this just call casearCipherGame() again?
+        print(str(ve) + "\n")
+        caesarCipherGame()
     
 
 def main():
