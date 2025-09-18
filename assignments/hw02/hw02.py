@@ -1,6 +1,13 @@
+'''
+Calvin Schaul
+IDSN 542, Fall 2025
+cschaul@usc.edu
+Homework 2
+'''
+
 import random
 
-words = [
+WORDS = [
     "trojan",
     "iovine",
     "young",
@@ -13,11 +20,11 @@ words = [
     "editor"
 ]
 
-alphabet_as_list = [chr(i) for i in range(ord('a'), ord('z') + 1)] # Love list comprehensions
+ALPHABET_AS_LIST = list('abcdefghijklmnopqrstuvwxyz')
 
 # Wrote this on an airplane without internet.
-def jumbleWord(word):
-    # Create a list from the letters in our word
+def jumble_word(word):
+    """ Jumbles the letters in a given word and returns the jumbled string."""
     word_as_list = [letter for letter in word]
 
     # Create a new list and randomly pop letters from the original list into the new list
@@ -28,25 +35,26 @@ def jumbleWord(word):
     # Return the jumbled string
     return ''.join(jumbled_word_as_list)
 
-def jumbleGame():
-    guessCount = 1 # User will always have at least one guess
-    word = random.choice(words)
-    jumbledWord = jumbleWord(word)
+def jumble_game():
+    """ Plays a simple jumble game with the user."""
+    guess_count = 1 # User will always have at least one guess
+    word = random.choice(WORDS)
+    jumbled_word = jumble_word(word)
 
-    print("The jumbled word is \"" + str(jumbledWord) + "\"")
+    print("The jumbled word is \"" + str(jumbled_word) + "\"")
     
     # Main Game Loop
     while True:
         # Validate Input: User can only enter alphabetic characters
         try:
-            userGuess = input("Please enter your guess: ")
-            if userGuess.isalpha() == False:
+            user_guess = input("Please enter your guess: ")
+            if user_guess.isalpha() == False:
                 # Invalid Input, raise ValueError and increment guess! No mercy!
-                guessCount += 1
+                guess_count += 1
                 raise ValueError("Input must only contain letters.")
-            elif userGuess.lower() != word:
+            elif user_guess.lower() != word:
                 # Incorrect Alphabetic Guess
-                guessCount += 1
+                guess_count += 1
                 print("Try again.\n")
             else:
                 # Corect Guess
@@ -57,36 +65,39 @@ def jumbleGame():
 
     # Exited loop, user must have guessed correctly
     print("You got it!")
-    if guessCount == 1:
+    if guess_count == 1:
         print("It took you 1 try.")
     else:
-        print("It took you " + str(guessCount) + " tries.")
+        print("It took you " + str(guess_count) + " tries.")
 
-def encryptMessage(message, shift):
+def encrypt_message(message, shift):
+    """ Encrypts a message using a Caesar cipher with the given shift amount."""
     encrypted_message = []
     for char in message:
-        if char not in alphabet_as_list:
+        if char not in ALPHABET_AS_LIST:
             encrypted_message.append(char) # Non-alphabetic characters are not encrypted/decrypted
         else:
-            base_index = alphabet_as_list.index(char)
+            base_index = ALPHABET_AS_LIST.index(char)
             shift_index = (base_index + shift) % 26 # Add shift to encrypt
-            encrypted_message.append(alphabet_as_list[shift_index])
+            encrypted_message.append(ALPHABET_AS_LIST[shift_index])
     
     return ''.join(encrypted_message) # Return the encrypted message as a string
 
-def decryptMessage(message, shift):
+def decrypt_message(message, shift):
+    """ Decrypts a message using a Caesar cipher with the given shift amount."""
     decrypted_message = []
     for char in message:
-        if char not in alphabet_as_list:
+        if char not in ALPHABET_AS_LIST:
             decrypted_message.append(char) # Non-alphabetic characters are not encrypted/decrypted
         else:
-            base_index = alphabet_as_list.index(char)
+            base_index = ALPHABET_AS_LIST.index(char)
             shift_index = (base_index - shift) % 26 # Subtract shift to decrypt
-            decrypted_message.append(alphabet_as_list[shift_index])
+            decrypted_message.append(ALPHABET_AS_LIST[shift_index])
 
     return ''.join(decrypted_message) # Return the decrypted message as a string
 
-def caesarCipherGame():
+def caesar_cipher_game():
+    """ Plays a simple Caesar cipher game with the user."""
     # User can enter any messsage, we will just shift the alphabetic characters and leave the rest alone
     user_message = input("Enter a message: ")
 
@@ -104,23 +115,23 @@ def caesarCipherGame():
             
             # Encrypt and Decrypt
             print("\nEncrypting message...")
-            encrypted_message = encryptMessage(user_message, shift_amount)
+            encrypted_message = encrypt_message(user_message, shift_amount)
             print("\n\tEncrypted message: " + encrypted_message)
 
             print("\nDecrypting message...")
-            decrypted_message = decryptMessage(encrypted_message, shift_amount)
+            decrypted_message = decrypt_message(encrypted_message, shift_amount)
             print("\n\tDecrypted message: " + decrypted_message)
             print("\n\tOriginal Message: " + user_message)
     except ValueError as ve:
         print(str(ve) + "\n")
-        caesarCipherGame()
+        caesar_cipher_game()
     
 
 def main():
     print("Starting Jumble Game...\n")
-    jumbleGame()
+    jumble_game()
     print("\nStarting Caesar Cipher Game...\n")
-    caesarCipherGame()
+    caesar_cipher_game()
 
 if __name__ == "__main__":
     main()
