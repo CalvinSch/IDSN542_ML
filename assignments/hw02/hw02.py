@@ -15,7 +15,6 @@ words = [
 
 alphabet_as_list = [chr(i) for i in range(ord('a'), ord('z') + 1)] # Love list comprehensions
 
-
 # Wrote this on an airplane without internet.
 def jumbleWord(word):
     # Create a list from the letters in our word
