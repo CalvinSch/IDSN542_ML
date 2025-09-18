@@ -24,7 +24,6 @@ def jumbleWord(word):
         jumbled_word_as_list.append(word_as_list.pop(random.randint(0,len(word_as_list) - 1)))
 
     # Return the jumbled string
-    #print(jumbled_word_as_list)
     return ''.join(jumbled_word_as_list)
 
 def jumbleGame():
@@ -34,31 +33,25 @@ def jumbleGame():
 
     print("The jumbled word is \"" + str(jumbledWord) + "\"")
     
-    #Main Game Loop
+    # Main Game Loop
     while True:
-        #Validate Input: User can only enter alphabetic characters
+        # Validate Input: User can only enter alphabetic characters
         try:
             userGuess = input("Please enter your guess: ")
             if userGuess.isalpha() == False:
-                #Invalid Input, raise ValueError and increment guess! No mercy!
+                # Invalid Input, raise ValueError and increment guess! No mercy!
                 guessCount += 1
                 raise ValueError("Input must only contain letters.")
             elif userGuess.lower() != word:
-                #Incorrect Alphabetic Guess
+                # Incorrect Alphabetic Guess
                 guessCount += 1
                 print("Try again.\n")
             else:
-                #Corect Guess
+                # Corect Guess
                 break
         except ValueError as ve:
             print(str(ve) + "\n")
             continue
-    # userGuess = input("Please enter your guess: ")
-
-    # while userGuess.lower() != word:
-    #     guessCount += 1
-    #     print("Try again.\n")
-    #     userGuess = input("Please enter your guess: ")
 
     # Exited loop, user must have guessed correctly
     print("You got it!")
