@@ -13,7 +13,7 @@ words = [
     "editor"
 ]
 
-#Wrote this on an airplane without internet.
+# Wrote this on an airplane without internet.
 def jumbleWord(word):
     # Create a list from the letters in our word
     word_as_list = [letter for letter in word]
@@ -33,16 +33,39 @@ def jumbleGame():
     jumbledWord = jumbleWord(word)
 
     print("The jumbled word is \"" + str(jumbledWord) + "\"")
-    userGuess = input("Please enter your guess: ")
+    
+    #Main Game Loop
+    while True:
+        #Validate Input: User can only enter alphabetic characters
+        try:
+            userGuess = input("Please enter your guess: ")
+            if userGuess.isalpha() == False:
+                #Invalid Input, raise ValueError and increment guess! No mercy!
+                guessCount += 1
+                raise ValueError("Input must only contain letters.")
+            elif userGuess.lower() != word:
+                #Incorrect Alphabetic Guess
+                guessCount += 1
+                print("Try again.\n")
+            else:
+                #Corect Guess
+                break
+        except ValueError as ve:
+            print(str(ve) + "\n")
+            continue
+    # userGuess = input("Please enter your guess: ")
 
-    while userGuess.lower() != word:
-        guessCount += 1
-        print("Try again.\n")
-        userGuess = input("Please enter your guess: ")
+    # while userGuess.lower() != word:
+    #     guessCount += 1
+    #     print("Try again.\n")
+    #     userGuess = input("Please enter your guess: ")
 
     # Exited loop, user must have guessed correctly
-    print("You got it")
-    print("It took you " + str(guessCount) + " tries.")
+    print("You got it!")
+    if guessCount == 1:
+        print("It took you 1 try.")
+    else:
+        print("It took you " + str(guessCount) + " tries.")
 
 def main():
     jumbleGame()
