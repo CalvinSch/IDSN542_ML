@@ -13,6 +13,9 @@ words = [
     "editor"
 ]
 
+alphabet_as_list = [chr(i) for i in range(ord('a'), ord('z') + 1)] # Love list comprehensions
+
+
 # Wrote this on an airplane without internet.
 def jumbleWord(word):
     # Create a list from the letters in our word
@@ -60,8 +63,65 @@ def jumbleGame():
     else:
         print("It took you " + str(guessCount) + " tries.")
 
+def encryptMessage(message, shift):
+    encrypted_message = []
+    for char in message:
+        if char not in alphabet_as_list:
+            encrypted_message.append(char) # Non-alphabetic characters are not encrypted/decrypted
+        else:
+            base_index = alphabet_as_list.index(char)
+            shift_index = (base_index + shift) % 26 # Add shift to encrypt
+            encrypted_message.append(alphabet_as_list[shift_index])
+    
+    return ''.join(encrypted_message) # Return the encrypted message as a string
+
+def decryptMessage(message, shift):
+    decrypted_message = []
+    for char in message:
+        if char not in alphabet_as_list:
+            decrypted_message.append(char) # Non-alphabetic characters are not encrypted/decrypted
+        else:
+            base_index = alphabet_as_list.index(char)
+            shift_index = (base_index - shift) % 26 # Subtract shift to decrypt
+            decrypted_message.append(alphabet_as_list[shift_index])
+
+    return ''.join(decrypted_message) # Return the decrypted message as a string
+
+def caesarCipherGame():
+    # User can enter any messsage, we will just shift the alphabetic characters and leave the rest alone
+    user_message = input("Enter a message: ")
+
+    # Get and Validate Shift: Shift amount must be an integer between 0 and 25
+    try:
+        shift_amount = input("Enter a shift amount (0-25): ")
+        if not shift_amount.isdigit():
+            raise ValueError("Shift amount must be an integer between 0 and 25.")
+        elif int(shift_amount) < 0 or int(shift_amount) > 25:
+            raise ValueError("Shift amount must be between 0 and 25.")
+        else:
+            # Requirements don't specify case-sensitivity, so just encrypt lowercase
+            shift_amount = int(shift_amount)
+            user_message = user_message.lower()
+            
+            # Encrypt and Decrypt
+            print("Encrypting message...")
+            encrypted_message = encryptMessage(user_message, shift_amount)
+            print("\tEncrypted message: " + encrypted_message)
+
+            print("Decrypting message...")
+            decrypted_message = decryptMessage(encrypted_message, shift_amount)
+            print("\tDecrypted message: " + decrypted_message)
+            print("\tOriginal Message: " + user_message)
+    except ValueError as ve:
+        print(str(ve))
+        return #Should this just call casearCipherGame() again?
+    
+
 def main():
+    print("Starting Jumble Game...\n")
     jumbleGame()
+    print("\nStarting Caesar Cipher Game...\n")
+    caesarCipherGame()
 
 if __name__ == "__main__":
     main()
