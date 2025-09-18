@@ -93,7 +93,7 @@ def caesarCipherGame():
 
     # Get and Validate Shift: Shift amount must be an integer between 0 and 25
     try:
-        shift_amount = input("Enter a shift amount (0-25): ")
+        shift_amount = input("\nEnter a shift amount (0-25): ")
         if not shift_amount.isdigit():
             raise ValueError("Shift amount must be an integer between 0 and 25.")
         elif int(shift_amount) < 0 or int(shift_amount) > 25:
@@ -104,14 +104,14 @@ def caesarCipherGame():
             user_message = user_message.lower()
             
             # Encrypt and Decrypt
-            print("Encrypting message...")
+            print("\nEncrypting message...")
             encrypted_message = encryptMessage(user_message, shift_amount)
-            print("\tEncrypted message: " + encrypted_message)
+            print("\n\tEncrypted message: " + encrypted_message)
 
-            print("Decrypting message...")
+            print("\nDecrypting message...")
             decrypted_message = decryptMessage(encrypted_message, shift_amount)
-            print("\tDecrypted message: " + decrypted_message)
-            print("\tOriginal Message: " + user_message)
+            print("\n\tDecrypted message: " + decrypted_message)
+            print("\n\tOriginal Message: " + user_message)
     except ValueError as ve:
         print(str(ve))
         return #Should this just call casearCipherGame() again?
