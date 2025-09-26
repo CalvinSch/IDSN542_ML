@@ -39,7 +39,7 @@ def get_user_date_inputs():
             # Validate month
             month = split_input[0].lower()
             if month not in MONTHS_DICT:
-                raise ValueError(f"I don't know the month \"{month}\"")
+                raise ValueError(f"I don't know the month \"{month.capitalize()}\"")
             
             # Validate day
             day = split_input[1]
@@ -47,7 +47,7 @@ def get_user_date_inputs():
                 raise ValueError("The day must be a number.")
             day = int(day)
             if day < 1 or day > MONTHS_DICT[month.lower()]:
-                raise ValueError(f"That month has has {MONTHS_DICT[month]} days.")
+                raise ValueError(f"That month only has {MONTHS_DICT[month]} days!")
             return month, day
         
         except ValueError as e:
@@ -98,7 +98,7 @@ def read_calendar_from_file(filename):
                 entry = file.readline()
             display_calendar()
     except FileNotFoundError:
-        print("File not found. Creating new Calendar")
+        print("File not found. Creating new Calendar...")
     return
 
 def write_calendar_to_file(filename):
