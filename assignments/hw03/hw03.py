@@ -64,10 +64,11 @@ def add_event_to_calendar(month, day):
     
     # If event is not empty, add it to the calendar dictionary
     if event != "":
-        CALENDAR_DICT[month][day - 1] = event
-    # If you already have an event, append the new event to the existing one
-    elif CALENDAR_DICT[month][day - 1] != "":
-        CALENDAR_DICT[month][day - 1] += "; " + event
+        if CALENDAR_DICT[month][day - 1] != "":
+            # Append to exsitng events! Gotta keep that busy schedule in tact
+            CALENDAR_DICT[month][day - 1] += "; " + event
+        else: 
+            CALENDAR_DICT[month][day - 1] = event
     # Nothing entered, do nothing
     else: 
         print("No event entered, nothing added to calendar.")
@@ -78,21 +79,41 @@ def write_calendar_to_file(filename):
     if filename == "":
         return
     try:
-        with open(filename, "r") as file:
-            for month in CALENDAR_DICT.keys():
-                for day in CALENDAR_DICT[month]:
-                    file.write(f"{month},{CALENDAR_DICT[month].index(day)},{day}\n")
-    except FileNotFoundError:
         with open(filename, "x") as file:
             for month in CALENDAR_DICT.keys():
-                for day in CALENDAR_DICT[month]:
-                    file.write(f"{month},{CALENDAR_DICT[month].index(day)},{day}\n")
+                for day in range(len(CALENDAR_DICT[month])):
+                    file.write(f"{month},{day},{CALENDAR_DICT[month][day]}\n")
+    except FileExistsError:
+        print("File already exists, overwriting...")
+        with open(filename, "w") as file:
+            for month in CALENDAR_DICT.keys():
+                for day in range(len(CALENDAR_DICT[month])):
+                    file.write(f"{month},{day},{CALENDAR_DICT[month][day]}\n")
     return
 
 def read_calendar_from_file(filename):
+    """ Read calendar from existing events texst file"""
+    try:
+        with open(filename, "r") as file:
+            entry = file.readline()
+            while entry != "":
+                event_info = entry.split(",")
+                print(event_info)
+                event_month = event_info[0]
+                event_date_index = int(event_info[1])
+                event_description = event_info[2].strip('\n')
+
+                CALENDAR_DICT[event_month][event_date_index] = event_description
+                # print(entry)
+                entry = file.readline()
+    except FileNotFoundError:
+        print("File not found.")
+    
+    display_calendar()
     return
 
 def display_calendar():
+    """ Display calendar dates with events"""
     # Loop through months and events and print
     print("\n") # Line space before dislpaying 
     for month in CALENDAR_DICT.keys():
@@ -101,6 +122,7 @@ def display_calendar():
     return
 
 def main():
+    """ Main Loop: Prompt to read from existing calendar text file, prompt for events, then display and save."""
     existing_calendar_input = input("Enter the file name to read your events: ")
     try:
         if existing_calendar_input != "":
@@ -119,11 +141,9 @@ def main():
     
     #Display all events & prompt user to write to file
     display_calendar()
-    #TODO: Prompt user for output file name
     calendar_filename = input("Enter the file name to save your events: ")
     write_calendar_to_file(calendar_filename)
     print("\nGoodbye!")
 
 if __name__ == "__main__":
     main()
-
