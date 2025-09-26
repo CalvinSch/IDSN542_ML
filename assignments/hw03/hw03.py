@@ -3,9 +3,7 @@ Calvin Schaul
 IDSN 542, Fall 2025
 cschaul@usc.edu
 Homework 3
-"""
-
-import os
+""" 
 
 # Months dictionary with number of days in each month
 MONTHS_DICT = {
@@ -53,9 +51,9 @@ def get_user_date_inputs():
             return month, day
         
         except ValueError as e:
-            print(f"{e}\n")
+            print(f"{e}")
         except Exception as e:
-            print("I don't see good input in there!\n")
+            print("I don't see good input in there!")
 
 def add_event_to_calendar(month, day):
     """ Prompts the user for an event and adds it to the calendar dictionary."""
@@ -74,9 +72,40 @@ def add_event_to_calendar(month, day):
         print("No event entered, nothing added to calendar.")
     return
 
+def display_calendar():
+    """ Display calendar dates with events"""
+    # Loop through months and events and print
+    print() # Line space before dislpaying 
+    for month in CALENDAR_DICT.keys():
+        for event in CALENDAR_DICT[month]:
+            if event != "": print(f"{month.capitalize()} {CALENDAR_DICT[month].index(event) + 1} : {event}")
+    return
+
+
+def read_calendar_from_file(filename):
+    """ Read calendar from existing events texst file"""
+    try:
+        with open(filename, "r") as file:
+            entry = file.readline()
+            while entry != "":
+                event_info = entry.split(",")
+                event_month = event_info[0]
+                event_date_index = int(event_info[1])
+                event_description = event_info[2].strip('\n')
+
+                CALENDAR_DICT[event_month][event_date_index] = event_description
+                # print(entry)
+                entry = file.readline()
+            display_calendar()
+    except FileNotFoundError:
+        print("File not found. Creating new Calendar")
+    return
+
 def write_calendar_to_file(filename):
     """ Writes the calendar dictionary to a file."""
     if filename == "":
+        # No filename given, don't save
+        print("No output specified. Your calendar will not be saved.")
         return
     try:
         with open(filename, "x") as file:
@@ -89,36 +118,6 @@ def write_calendar_to_file(filename):
             for month in CALENDAR_DICT.keys():
                 for day in range(len(CALENDAR_DICT[month])):
                     file.write(f"{month},{day},{CALENDAR_DICT[month][day]}\n")
-    return
-
-def read_calendar_from_file(filename):
-    """ Read calendar from existing events texst file"""
-    try:
-        with open(filename, "r") as file:
-            entry = file.readline()
-            while entry != "":
-                event_info = entry.split(",")
-                print(event_info)
-                event_month = event_info[0]
-                event_date_index = int(event_info[1])
-                event_description = event_info[2].strip('\n')
-
-                CALENDAR_DICT[event_month][event_date_index] = event_description
-                # print(entry)
-                entry = file.readline()
-    except FileNotFoundError:
-        print("File not found.")
-    
-    display_calendar()
-    return
-
-def display_calendar():
-    """ Display calendar dates with events"""
-    # Loop through months and events and print
-    print("\n") # Line space before dislpaying 
-    for month in CALENDAR_DICT.keys():
-        for event in CALENDAR_DICT[month]:
-            if event != "": print(f"{month.capitalize()} {CALENDAR_DICT[month].index(event) + 1} : {event}")
     return
 
 def main():
@@ -140,9 +139,9 @@ def main():
         add_event_to_calendar(month, day)
     
     #Display all events & prompt user to write to file
-    display_calendar()
-    calendar_filename = input("Enter the file name to save your events: ")
+    calendar_filename = input("\nEnter the file name to save your events: ")
     write_calendar_to_file(calendar_filename)
+    display_calendar()
     print("\nGoodbye!")
 
 if __name__ == "__main__":
