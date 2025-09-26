@@ -97,6 +97,7 @@ def read_calendar_from_file(filename):
                 # print(entry)
                 entry = file.readline()
             display_calendar()
+            file.close()
     except FileNotFoundError:
         print("File not found. Creating new Calendar...")
     return
@@ -112,12 +113,14 @@ def write_calendar_to_file(filename):
             for month in CALENDAR_DICT.keys():
                 for day in range(len(CALENDAR_DICT[month])):
                     file.write(f"{month},{day},{CALENDAR_DICT[month][day]}\n")
+        file.close()
     except FileExistsError:
         print("File already exists, overwriting...")
         with open(filename, "w") as file:
             for month in CALENDAR_DICT.keys():
                 for day in range(len(CALENDAR_DICT[month])):
                     file.write(f"{month},{day},{CALENDAR_DICT[month][day]}\n")
+        file.close()
     return
 
 def main():
