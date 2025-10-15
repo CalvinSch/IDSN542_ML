@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
 from pandas.plotting import scatter_matrix
 
+from zlib import crc32
+
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -66,28 +68,28 @@ print(strat_test_set["income_cat"].value_counts() / len(strat_test_set))
 print(strat_train_set["income_cat"].value_counts() / len(strat_train_set))
 
 #Removes the income category we added to the original dataset
-#remove_income_cat(strat_train_set, strat_test_set)
+remove_income_cat(strat_train_set, strat_test_set)
 
 #Now we just want to use the training set. Test set will be needed once we have ML algo trained
-#housing = strat_train_set.copy()
+housing = strat_train_set.copy()
 #rint(len(housing))
 
-#housing.plot(kind="scatter", x="longitude", y="latitude")
-#plt.show() #This is required in PyCharm - not shown in book
+housing.plot(kind="scatter", x="longitude", y="latitude")
+plt.show() #This is required in PyCharm - not shown in book
 
-#housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4, s=housing["population"]/100, label="population", figsize=(10,7),c="median_house_value",cmap=plt.get_cmap("jet"),colorbar=True)
-#plt.legend()
-#plt.show() #This is required in PyCharm - not shown in book
+housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4, s=housing["population"]/100, label="population", figsize=(10,7),c="median_house_value",cmap=plt.get_cmap("jet"),colorbar=True)
+plt.legend()
+plt.show() #This is required in PyCharm - not shown in book
 
-#corr_matrix = housing.corr(numeric_only = True)
-#print(corr_matrix["median_house_value"].sort_values(ascending=False))
+corr_matrix = housing.corr(numeric_only = True)
+print(corr_matrix["median_house_value"].sort_values(ascending=False))
 
-#attributes = ["median_house_value", "median_income", "total_rooms","housing_median_age"]
-#scatter_matrix(housing[attributes],figsize=(12,8))
-#plt.show()
+attributes = ["median_house_value", "median_income", "total_rooms","housing_median_age"]
+scatter_matrix(housing[attributes],figsize=(12,8))
+plt.show()
 
-#housing.plot(kind="scatter", x="median_income", y="median_house_value", alpha=0.1)
-#plt.show()
+housing.plot(kind="scatter", x="median_income", y="median_house_value", alpha=0.1)
+plt.show()
 
 '''
 housing["rooms_per_household"] = housing["total_rooms"]/housing["households"]
