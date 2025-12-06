@@ -1,3 +1,7 @@
 /textbooks
 /idsn542
-pyenv.cfg
+pyvenv.cfg
+/Scripts
+/Lib
+/Include
+/share
