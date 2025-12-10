@@ -2,7 +2,7 @@
 Calvin Schaul
 IDSN 542, Fall 2025
 cschaul@usc.edu
-Final Project Part 1 + 2
+Final Project Part 1 + 2 + 3
 '''
 
 from pathlib import Path
@@ -20,9 +20,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, root_mean_squared_error
 from sklearn.model_selection import StratifiedShuffleSplit
-
 
 
 def load_data(path):
@@ -73,7 +72,7 @@ def plot_correlation_comparisons(data, attributes, correlation_values, threshold
 	# Set figure size: width and height proportional to number of attributes
 	figsize = (2.5 * n_attrs, 2.5 * n_attrs)
 	scatter_matrix(data[correlated_attributes], figsize=figsize)
-	plt.show() # You have to close the plot window to continue the program
+	# plt.show()
 	pass
 
 def training_accuracy(model, X_train, y_train):
@@ -91,7 +90,10 @@ def plot_roc(model, X, y, model_name):
 	plt.ylabel('True Positive Rate')
 	plt.title('ROC Curve')
 	plt.legend()
-	plt.show()
+	# plt.show()
+
+def caclulate_training_rmse(training_predictions, target):
+	return root_mean_squared_error(target, training_predictions)
 
 def main():
 	# Load data
@@ -175,6 +177,9 @@ def main():
 	print("Predictions mean:", dt_best.predict(parkinsons_train_prepared).mean())
 	
 	plot_roc(dt_best, parkinsons_train_prepared, diagnosis_train, "Decision Tree Classifier")
+
+	# Calculate RMSE after hyperparam search
+	print("Decision Tree Training RMSE: " + str(caclulate_training_rmse(dt_best.predict_proba(parkinsons_train_prepared)[:, 1], diagnosis_train)))
 	
 	### MODEL 2: RANDOM FOREST CLASSIFIER
 	random_forest_clf = RandomForestClassifier(random_state=42)
@@ -187,6 +192,9 @@ def main():
 	print("Best parameters for Random Forest Classifier:", rf_grid_search.best_params_)
 	rf_best = rf_grid_search.best_estimator_
 	plot_roc(rf_best, parkinsons_train_prepared, diagnosis_train, "Random Forest Classifier")
+
+	# Calculate RMSE after hyperparam search
+	print("Decision Tree Training RMSE: " + str(caclulate_training_rmse(rf_best.predict_proba(parkinsons_train_prepared)[:, 1], diagnosis_train)))
 
 	### MODEL 3: SUPPORT VECTOR CLASSIFIER
 	svc_clf = SVC(random_state=42, probability=True)
@@ -202,5 +210,8 @@ def main():
 	print("Best parameters for Support Vector Classifier:", svc_grid_search.best_params_)
 	svc_best = svc_grid_search.best_estimator_
 	plot_roc(svc_best, parkinsons_train_prepared, diagnosis_train, "Support Vector Classifier")
+
+	# Calculate RMSE after hyperparam search
+	print("Decision Tree Training RMSE: " + str(caclulate_training_rmse(svc_best.predict_proba(parkinsons_train_prepared)[:, 1], diagnosis_train)))
 
 main()
