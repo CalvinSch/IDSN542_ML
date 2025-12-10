@@ -164,7 +164,7 @@ def main():
 		'class_weight': [None, 'balanced'],
 	}
 	
-	# grid search
+	# grid search #TODO: just do grid serach with refit
 	dt_grid_search = GridSearchCV( decision_tree_clf, dt_param_grid, cv=5, scoring='neg_mean_squared_error',return_train_score=True)
 	dt_grid_search.fit( parkinsons_train_prepared, diagnosis_train)
 	print("Best parameters for Decision Tree Classifier:", dt_grid_search.best_params_)
